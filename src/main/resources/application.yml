@@ -1,0 +1,25 @@
+server:
+  port: 8000
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: chat
+          uri: http://localhost:8080
+          predicates:
+            - Path=/chat/**
+          filters:
+#            - RewritePath=/chat(?<segment>/?.*), $\{segment}
+            - StripPrefix=1
+            - AuthorizationHeaderFilterFactory
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
